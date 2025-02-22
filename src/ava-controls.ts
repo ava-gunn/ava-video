@@ -86,6 +86,14 @@ export class AvaControls extends LitElement {
             </button>
           </div>
           <div class="controls-right">
+            <button class="control" @click=${() => null}>
+              <svg class="icon"><use href="/sprite.svg#captions"></use></svg>
+            </button>
+
+            <button class="control" @click=${() => null}>
+              <svg class="icon"><use href="/sprite.svg#mini-player"></use></svg>
+            </button>
+
             <button
               class="control"
               @click=${() => this.dispatchControlEvent('fullscreen-toggle')}
