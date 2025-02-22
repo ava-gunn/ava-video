@@ -18,81 +18,87 @@ export class AvaControls extends LitElement {
   }
 
   static styles = css`
-   :host {
-     display: block;
-     position: absolute;
-     bottom: 0;
-     left: 0;
-     right: 0;
-     padding: 1rem;
-     background: linear-gradient(transparent, rgba(0, 0, 0, 0.75);
-    transition: opacity 0.3s; 
-   }
+    :host {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+      transition: opacity 0.3s;
+    }
 
-   .controls-bar {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-   }
-   
-   .control {
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    color: white;
-    transition: opacity 0.25s;
-   }
+    .controls-bar {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-   .control:hover {
-    opacity: 0.8;
-   }
+    .control {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      color: white;
+      transition: opacity 0.25s;
+    }
 
-   .icon {
-     width: 24px;
-     height: 24px;
-     fill: currentColor;
-   }
+    .control:hover {
+      opacity: 0.8;
+    }
+
+    .icon {
+      width: var(--icon-size, 24px);
+      height: var(--icon-size, 24px);
+      fill: currentColor;
+    }
   `;
 
   render() {
     return html`
       <div class="controls-container">
         <div class="controls-bar">
-          <button
-            class="control"
-            @click=${() => this.dispatchControlEvent('play-pause')}
-          >
-            <svg class="icon">
-              <use
-                href="/sprite.svg#${this.isPlaying ? 'pause' : 'play'}"
-              ></use>
-            </svg>
-          </button>
+          <div class="controls-left">
+            <button
+              class="control"
+              @click=${() => this.dispatchControlEvent('play-pause')}
+            >
+              <svg class="icon">
+                <use
+                  href="/sprite.svg#${this.isPlaying ? 'pause' : 'play'}"
+                ></use>
+              </svg>
+            </button>
 
-          <button
-            class="control"
-            @click=${() => this.dispatchControlEvent('volume-toggle')}
-          >
-            <svg class="icon">
-              <use
-                href="/sprite.svg#${this.isMuted ? 'volume-mute' : 'volume-on'}"
-              ></use>
-            </svg>
-          </button>
-
-          <button
-            class="control"
-            @click=${() => this.dispatchControlEvent('fullscreen-toggle')}
-          >
-            <svg class="icon">
-              <use
-                href="/sprite.svg#${this.isFullscreen
-                  ? 'fullscreen-exit'
-                  : 'fullscreen'}"
-              ></use>
-            </svg>
-          </button>
+            <button
+              class="control"
+              @click=${() => this.dispatchControlEvent('volume-toggle')}
+            >
+              <svg class="icon">
+                <use
+                  href="/sprite.svg#${this.isMuted
+                    ? 'volume-muted'
+                    : 'volume-high'}"
+                ></use>
+              </svg>
+            </button>
+          </div>
+          <div class="controls-right">
+            <button
+              class="control"
+              @click=${() => this.dispatchControlEvent('fullscreen-toggle')}
+            >
+              <svg class="icon">
+                <use
+                  href="/sprite.svg#${this.isFullscreen
+                    ? 'fullscreen-close'
+                    : 'fullscreen-open'}"
+                ></use>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     `;
