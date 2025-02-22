@@ -43,10 +43,11 @@ export class AvaControls extends LitElement {
       cursor: pointer;
       color: white;
       transition: opacity 0.25s;
+      opacity: 0.8;
     }
 
     .control:hover {
-      opacity: 0.8;
+      opacity: 1;
     }
 
     .icon {
