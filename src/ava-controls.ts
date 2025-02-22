@@ -1,4 +1,4 @@
-import { html, LitElement } from 'lit';
+import { html, LitElement, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 @customElement('ava-controls')
@@ -16,6 +16,44 @@ export class AvaControls extends LitElement {
       }),
     );
   }
+
+  static styles = css`
+   :host {
+     display: block;
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     padding: 1rem;
+     background: linear-gradient(transparent, rgba(0, 0, 0, 0.75);
+    transition: opacity 0.3s; 
+   }
+
+   .controls-bar {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+   }
+   
+   .control {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: white;
+    transition: opacity 0.25s;
+   }
+
+   .control:hover {
+    opacity: 0.8;
+   }
+
+   .icon {
+     width: 24px;
+     height: 24px;
+     fill: currentColor;
+   }
+  `;
 
   render() {
     return html`
