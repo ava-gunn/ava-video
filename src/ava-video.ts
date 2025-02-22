@@ -1,5 +1,6 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { LitElement, html, css, PropertyValues } from 'lit';
+import { customElement, property, query, state } from 'lit/decorators.js';
+import { AvaControls } from './ava-controls.ts';
 
 interface PlaybackProperties {
   autoplay?: boolean;
@@ -60,6 +61,71 @@ export class AvaVideo extends LitElement implements VideoProperties {
   @property({ type: Function }) onTimeUpdate: (() => void) | undefined;
   @property({ type: Function }) onVolumeChange: (() => void) | undefined;
 
+  @state() private isPlaying = false;
+  @state() private isMuted = false;
+  @state() private isFullscreen = false;
+
+  @query('video', true) private videoElement!: HTMLVideoElement;
+  @query('ava-controls', true) private controlsElement!: AvaControls;
+
+  protected createRenderRoot(): HTMLElement | DocumentFragment {
+    return this;
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues): void {
+    this.setupEventListeners();
+    this.addEventListener('controls-click', this.handleControlClick);
+  }
+
+  private setupEventListeners() {
+    this.videoElement.addEventListener('play', () => {
+      this.isPlaying = true;
+      this.controlsElement.isPlaying = true;
+    });
+
+    this.videoElement.addEventListener('pause', () => {
+      this.isPlaying = false;
+      this.controlsElement.isPlaying = false;
+    });
+
+    this.videoElement.addEventListener('volumechange', () => {
+      this.isMuted = this.videoElement.muted;
+      this.controlsElement.isMuted = this.isMuted;
+    });
+  }
+
+  private handleControlClick(e: CustomEvent) {
+    const { action } = e.detail;
+
+    switch (action) {
+      case 'play-pause':
+        this.togglePlay();
+        break;
+      case 'volume-toggle':
+        this.toggleMute();
+        break;
+      case 'fullscreen-toggle':
+        this.toggleFullscreen();
+        break;
+    }
+  }
+
+  private togglePlay() {
+    this.videoElement[this.isPlaying ? 'pause' : 'play']();
+  }
+
+  private toggleMute() {
+    this.videoElement.muted = !this.isMuted;
+  }
+
+  private toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      this.requestFullscreen().then(() => (this.isFullscreen = true));
+    } else {
+      document.exitFullscreen().then(() => (this.isFullscreen = false));
+    }
+  }
+
   static styles = css`
     video {
       width: 100vw;
@@ -67,12 +133,24 @@ export class AvaVideo extends LitElement implements VideoProperties {
   `;
 
   render() {
-    return html`<video src=${this.src} ?controls=${this.controls}></video>`;
+    return html`
+      <div class="video-container">
+        <video src=${this.src}></video>
+        <ava-controls
+          .isPlaying=${this.isPlaying}
+          .isMuted=${this.isMuted}
+          .isFullscreen=${this.isFullscreen}
+        ></ava-controls>
+      </div>
+    `;
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
     'ava-video': AvaVideo;
+  }
+  interface HTMLElementEventMap {
+    'controls-click': CustomEvent;
   }
 }
