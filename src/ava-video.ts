@@ -137,7 +137,7 @@ export class AvaVideo extends LitElement implements VideoProperties {
       width: 100%;
       height: auto;
     }
-    `;
+  `;
 
   render() {
     return html`
