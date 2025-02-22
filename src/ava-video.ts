@@ -74,7 +74,7 @@ export class AvaVideo extends LitElement implements VideoProperties {
 
   protected firstUpdated(_changedProperties: PropertyValues): void {
     this.setupEventListeners();
-    this.addEventListener('controls-click', this.handleControlClick);
+    this.addEventListener('control-click', this.handleControlClick);
   }
 
   private setupEventListeners() {
@@ -151,6 +151,6 @@ declare global {
     'ava-video': AvaVideo;
   }
   interface HTMLElementEventMap {
-    'controls-click': CustomEvent;
+    'control-click': CustomEvent;
   }
 }
